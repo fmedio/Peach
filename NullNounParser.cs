@@ -4,7 +4,7 @@
     // Released under Creative Commons CC0 terms
     // http://creativecommons.org/publicdomain/zero/1.0/legalcode
 
-    public class NullRequestParser : RequestParser<Null>
+    public class NullNounParser : NounParser<Null>
     {
         public override Null Parse(Bag<string, string> bag)
         {

@@ -7,7 +7,7 @@ namespace Peach
     // Released under Creative Commons CC0 terms
     // http://creativecommons.org/publicdomain/zero/1.0/legalcode
 
-    public abstract class RequestParser<T>
+    public abstract class NounParser<T>
     {
         public abstract T Parse(Bag<string, string> bag);
         public abstract Bag<string, string> Serialize(T tee);

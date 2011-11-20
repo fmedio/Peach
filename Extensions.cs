@@ -18,7 +18,7 @@ namespace Peach
             }
         }
 
-        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
+        public static void ForEach<T>(this IEnumerable<T> enumerable, System.Action<T, int> action)
         {
             int currentOffset = 0;
             foreach (var value in enumerable)
@@ -35,6 +35,25 @@ namespace Peach
             for (var read = src.Read(buffer, 0, size); read != 0; read = src.Read(buffer, 0, size))
             {
                 dest.Write(buffer, 0, read);
+            }
+        }
+
+        public static void CreateMaybe(this DirectoryInfo directoryInfo)
+        {
+            if (!Directory.Exists(directoryInfo.FullName))
+            {
+                Directory.CreateDirectory(directoryInfo.FullName);
+            }
+        }
+
+        public static void DeleteMaybe(this DirectoryInfo directoryInfo)
+        {
+            try
+            {
+                Directory.Delete(directoryInfo.FullName, true);
+            } catch (Exception e)
+            {
+                
             }
         }
     }

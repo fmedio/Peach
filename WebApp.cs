@@ -17,24 +17,24 @@ namespace Peach
         private readonly int _httpPort;
         private readonly TServices _services;
         private readonly Dispatcher<TServices> _dispatcher;
-        private StaticFileHandler _staticFileHandler;
+        private readonly StaticFileHandler _staticFileHandler;
 
-        public ActionId<TServices> NotFoundAction { get; set; }
+        public IVerb<TServices> NotFoundVerb { get; set; }
         public Func<IResource> NotFoundPage { get; set; }
         public Func<string, Exception, IResource> ErrorPage { get; set; }
 
-        public WebApp(int httpPort, DirectoryInfo webRoot, TServices services, IEnumerable<ActionId<TServices>> actionIds)
+        public WebApp(int httpPort, DirectoryInfo webRoot, TServices services, IEnumerable<IVerb<TServices>> verbs)
         {
             _httpPort = httpPort;
             _services = services;
-            NotFoundAction = FourOhFourAction<TServices>.Id;
+            NotFoundVerb = new FourOhFour<TServices>();
 
             ErrorPage = (message, exception) => new ErrorPage(exception, message);
             NotFoundPage = () => new ForOhFourPage();
 
             _staticFileHandler = new StaticFileHandler(webRoot, NotFoundPage);
 
-            _dispatcher = new Dispatcher<TServices>(actionIds, NotFoundAction);
+            _dispatcher = new Dispatcher<TServices>(verbs, NotFoundVerb);
         }
 
         // Under Win7 you need to grant the current user the right to open an HTTP pipeline on all interfaces
@@ -66,8 +66,8 @@ namespace Peach
                 {
                     var localName = Regex.Replace(request.Url.LocalPath, "^/", "");
                     var args = ParseArgs(request.QueryString);
-                    var action = _dispatcher.Dispatch(localName);
-                    resource = action.Execute(_services, args);                                                    
+                    var verb = _dispatcher.Dispatch(localName);
+                    resource = verb.Action(_services, args);                                                    
                 }
 
             } catch (Exception e)

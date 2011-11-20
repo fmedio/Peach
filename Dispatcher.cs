@@ -9,23 +9,23 @@ namespace Peach
 
     public class Dispatcher<TServices>
     {
-        private readonly IDictionary<string, ActionId<TServices>> _actions;
-        private readonly ActionId<TServices> _notFound;
+        private readonly IDictionary<string, IVerb<TServices>> _verbs;
+        private readonly IVerb<TServices> _notFound;
 
-        public Dispatcher(IEnumerable<ActionId<TServices>> actionIds, ActionId<TServices> notFound)
+        public Dispatcher(IEnumerable<IVerb<TServices>> verbs, IVerb<TServices> notFound)
         {
             _notFound = notFound;
-            _actions = actionIds.ToDictionary(id => id.Name);
+            _verbs = verbs.ToDictionary(id => id.Name);
         }
 
-        public IAction<TServices> Dispatch(string name)
+        public IVerb<TServices> Dispatch(string name)
         {
-            if (_actions.ContainsKey(name))
+            if (_verbs.ContainsKey(name))
             {
-                return _actions[name].MakeAction();
+                return _verbs[name];
             }
 
-            return _notFound.MakeAction();
+            return _notFound;
         }
     }
 }
