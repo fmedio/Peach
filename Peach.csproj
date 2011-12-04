@@ -50,6 +50,7 @@
     <Compile Include="ForOhFourPage.cs" />
     <Compile Include="FourOhFour.cs" />
     <Compile Include="Html5Page.cs" />
+    <Compile Include="HtmlSnippet.cs" />
     <Compile Include="IVerb.cs" />
     <Compile Include="ILinkable.cs" />
     <Compile Include="InvalidRequestException.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="StaticFileHandler.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="Tags.cs" />
+    <Compile Include="TempStorage.cs" />
     <Compile Include="Test\BagTest.cs" />
     <Compile Include="Test\TagTest.cs" />
     <Compile Include="Text.cs" />

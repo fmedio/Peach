@@ -20,6 +20,16 @@ namespace Peach
             return t("body").Add(children);
         }
 
+        public static Tag B(params string[] children)
+        {
+            return t("b").Add(children);
+        }
+
+        public static Tag Br()
+        {
+            return t("br");
+        }
+
         public static IRenderable Concat(params IRenderable[] children)
         {
             return new Renderables(children);
@@ -46,6 +56,11 @@ namespace Peach
         public static Tag H1(string text)
         {
             return t("h1").Add(text);
+        }
+
+        public static Tag H2(string text)
+        {
+            return t("h2").Add(text);
         }
 
         public static Tag Head(params IRenderable[] children)

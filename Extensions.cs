@@ -18,7 +18,7 @@ namespace Peach
             }
         }
 
-        public static void ForEach<T>(this IEnumerable<T> enumerable, System.Action<T, int> action)
+        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
         {
             int currentOffset = 0;
             foreach (var value in enumerable)
