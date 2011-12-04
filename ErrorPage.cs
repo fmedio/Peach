@@ -18,6 +18,8 @@ namespace Peach
             _message = message;
         }
 
+        
+
         public string ContentType
         {
             get { return "text/plain"; }
@@ -42,5 +44,7 @@ namespace Peach
         {
             get { return new Bag<string, string>(); }
         }
+
+        
     }
 }

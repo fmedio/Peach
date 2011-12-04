@@ -7,7 +7,9 @@ namespace Peach
     // http://creativecommons.org/publicdomain/zero/1.0/legalcode
 
     public class FourOhFour<TServices> : IVerb<TServices>
-    {        
+    {
+        
+
         public Func<TServices, Bag<string, string>, IResource> Action
         {
             get { return (services, bag) => new ForOhFourPage(); }
@@ -17,5 +19,7 @@ namespace Peach
         {
             get { return "404"; }
         }
+
+        
     }
 }

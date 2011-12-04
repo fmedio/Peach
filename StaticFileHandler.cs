@@ -11,44 +11,6 @@ namespace Peach
 
     public class StaticFileHandler
     {
-        private readonly DirectoryInfo _webRoot;
-        private readonly Func<IResource> _resourceNotFound;
-
-        public StaticFileHandler(DirectoryInfo webRoot, Func<IResource> resourceNotFound)
-        {
-            _webRoot = webRoot;
-            _resourceNotFound = resourceNotFound;
-        }
-
-        public IResource Handle(string target)
-        {
-            target = Regex.Replace(target, "^/static/", "");
-            target = Regex.Replace(target, "/", "\\");
-
-            var localPath = Path.Combine(_webRoot.FullName, target);
-
-            if (! File.Exists(localPath))
-            {
-                return _resourceNotFound();
-            }
-
-            var fileInfo = new FileInfo(localPath);
-            var contentType = DetermineContentType(fileInfo);
-            return new StaticResource(contentType, fileInfo);
-        }
-
-        private string DetermineContentType(FileInfo localPath)
-        {
-            var extension = localPath.Extension.ToLower();
-            if (ContentTypes.ContainsKey(extension))
-            {
-                return ContentTypes[extension];
-            } else
-            {
-                return "application/octet-stream";
-            }
-        }
-
         private static readonly Dictionary<string, string> ContentTypes = new Dictionary<string, string>
                                                                               {
                                                                                   {".js", "text/javascript"},
@@ -61,10 +23,49 @@ namespace Peach
                                                                                   {".jpg", "image/jpeg"},
                                                                                   {".jpeg", "image/jpeg"},
                                                                                   {".ico", "image/bmp"},
-                                                                              }; 
+                                                                              };
+
+        private readonly Func<IResource> _resourceNotFound;
+        private readonly DirectoryInfo _webRoot;
+
+        public StaticFileHandler(DirectoryInfo webRoot, Func<IResource> resourceNotFound)
+        {
+            _webRoot = webRoot;
+            _resourceNotFound = resourceNotFound;
+        }
+
+        public IResource Handle(string target)
+        {
+            target = Regex.Replace(target, "^/static/", "");
+            target = Regex.Replace(target, "/", "\\");
+
+            string localPath = Path.Combine(_webRoot.FullName, target);
+
+            if (! File.Exists(localPath))
+            {
+                return _resourceNotFound();
+            }
+
+            var fileInfo = new FileInfo(localPath);
+            string contentType = DetermineContentType(fileInfo);
+            return new StaticResource(contentType, fileInfo);
+        }
+
+        private string DetermineContentType(FileInfo localPath)
+        {
+            string extension = localPath.Extension.ToLower();
+            if (ContentTypes.ContainsKey(extension))
+            {
+                return ContentTypes[extension];
+            }
+            else
+            {
+                return "application/octet-stream";
+            }
+        }
     }
 
-    class StaticResource : IResource
+    internal class StaticResource : IResource
     {
         private readonly FileInfo _path;
 
@@ -74,9 +75,14 @@ namespace Peach
             ContentType = contentType;
         }
 
+        
+
         public string ContentType { get; private set; }
 
-        public int HttpStatus { get { return 200; } }
+        public int HttpStatus
+        {
+            get { return 200; }
+        }
 
         public void Render(Stream stream)
         {
@@ -85,6 +91,11 @@ namespace Peach
             fileStream.Close();
         }
 
-        public Bag<string, string> ExtraHeaders { get { return new Bag<string, string>(); } }
+        public Bag<string, string> ExtraHeaders
+        {
+            get { return new Bag<string, string>(); }
+        }
+
+        
     }
 }

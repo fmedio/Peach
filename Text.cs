@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security;
 
 namespace Peach
 {
@@ -20,9 +21,13 @@ namespace Peach
             _value = value;
         }
 
+        
+
         public void Render(StreamWriter streamWriter)
         {
-            streamWriter.Write(System.Security.SecurityElement.Escape(_value));
+            streamWriter.Write(SecurityElement.Escape(_value));
         }
+
+        
     }
 }

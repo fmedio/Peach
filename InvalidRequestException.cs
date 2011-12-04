@@ -9,6 +9,7 @@ namespace Peach
     public class InvalidRequestException : Exception
     {
         public InvalidRequestException(string key) : base("Invalid key '" + key + "' for request")
-        {}
+        {
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Text;
 
 namespace Peach
@@ -17,7 +18,7 @@ namespace Peach
             if (args.ContainsKey(key))
             {
                 return args[key];
-            } 
+            }
 
             throw new InvalidRequestException(key);
         }
@@ -27,7 +28,8 @@ namespace Peach
             try
             {
                 return Int32.Parse(args[key]);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new InvalidRequestException(key);
             }
@@ -42,7 +44,7 @@ namespace Peach
 
         private string Secure(string s)
         {
-            return System.Security.SecurityElement.Escape(s);
+            return SecurityElement.Escape(s);
         }
     }
 }

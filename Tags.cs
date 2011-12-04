@@ -8,7 +8,7 @@ namespace Peach
     // Released under Creative Commons CC0 terms
     // http://creativecommons.org/publicdomain/zero/1.0/legalcode
 
-    public abstract class Tags 
+    public abstract class Tags
     {
         public static Tag A(string href, params string[] children)
         {
@@ -80,7 +80,7 @@ namespace Peach
                 .Attr("name", name)
                 .Attr("value", value)
                 .Add(children);
-        } 
+        }
 
         public static Tag Li(params IRenderable[] children)
         {
@@ -89,7 +89,7 @@ namespace Peach
 
         public static Tag Li(params string[] children)
         {
-            return t("li").Add(children);    
+            return t("li").Add(children);
         }
 
         public static Tag Link(string href, string rel, string type)
@@ -150,6 +150,13 @@ namespace Peach
             return t("ul").Add(children);
         }
 
+        private static Tag t(string name)
+        {
+            return new Tag(name);
+        }
+
+        
+
         private class Renderables : IRenderable
         {
             private readonly IEnumerable<IRenderable> _renderables;
@@ -159,15 +166,16 @@ namespace Peach
                 _renderables = renderables;
             }
 
+            
+
             public void Render(StreamWriter streamWriter)
             {
                 _renderables.ForEach(r => r.Render(streamWriter));
             }
+
+            
         }
 
-        private static Tag t(string name)
-        {
-            return new Tag(name);
-        }
+        
     }
 }

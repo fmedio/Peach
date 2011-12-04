@@ -9,8 +9,8 @@ namespace Peach
 
     public class Dispatcher<TServices>
     {
-        private readonly IDictionary<string, IVerb<TServices>> _verbs;
         private readonly IVerb<TServices> _notFound;
+        private readonly IDictionary<string, IVerb<TServices>> _verbs;
 
         public Dispatcher(IEnumerable<IVerb<TServices>> verbs, IVerb<TServices> notFound)
         {

@@ -11,9 +11,10 @@ namespace Peach
 
     public class Tag : IRenderable
     {
-        private readonly string _name;
-        private readonly List<IRenderable> _children;
         private readonly List<KeyValuePair<string, string>> _attributes;
+        private readonly List<IRenderable> _children;
+        private readonly string _name;
+
         public Tag(string name)
         {
             _name = name;
@@ -21,18 +22,23 @@ namespace Peach
             _attributes = new List<KeyValuePair<string, string>>();
         }
 
+        
+
         public void Render(StreamWriter streamWriter)
         {
             if (_children.Count == 0)
             {
-                streamWriter.Write("<" + _name + FormatAttributes() + " />");                
-            } else
+                streamWriter.Write("<" + _name + FormatAttributes() + " />");
+            }
+            else
             {
                 streamWriter.Write("<" + _name + FormatAttributes() + ">");
                 _children.ForEach(r => r.Render(streamWriter));
                 streamWriter.Write("</" + _name + ">");
             }
         }
+
+        
 
         private string FormatAttributes()
         {

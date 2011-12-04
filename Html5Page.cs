@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,22 +11,34 @@ namespace Peach
 
     public abstract class Html5Page : Tags, IResource
     {
+        protected Html5Page()
+        {
+            JsIncludes = new List<string>();
+            CssIncludes = new List<string>();
+        }
+
         public abstract IRenderable BodyContents { get; }
         public abstract string PageTitle { get; }
 
         public List<string> JsIncludes { get; private set; }
         public List<string> CssIncludes { get; private set; }
 
-        public virtual Bag<string, string> ExtraHeaders { get { return new Bag<string, string>(); } }
-        public virtual int HttpStatus { get { return 200; } }
+        
 
-
-        public string ContentType { get { return "text/html; charset=utf-8"; } }
-
-        protected Html5Page()
+        public virtual Bag<string, string> ExtraHeaders
         {
-            JsIncludes = new List<string>();
-            CssIncludes = new List<string>();
+            get { return new Bag<string, string>(); }
+        }
+
+        public virtual int HttpStatus
+        {
+            get { return 200; }
+        }
+
+
+        public string ContentType
+        {
+            get { return "text/html; charset=utf-8"; }
         }
 
         public void Render(Stream stream)
@@ -37,7 +48,7 @@ namespace Peach
             streamWriter.WriteLine("<!DOCTYPE html>");
             Html(
                 Head(
-                    Concat(CssIncludes.Select(path => Link(path, "stylesheet", "text/css"))),  
+                    Concat(CssIncludes.Select(path => Link(path, "stylesheet", "text/css"))),
                     Concat(JsIncludes.Select(path => Script("javascript", "text/javascript", path))),
                     Title(PageTitle),
                     Body(BodyContents)
@@ -45,5 +56,6 @@ namespace Peach
                 ).Render(streamWriter);
         }
 
+        
     }
 }

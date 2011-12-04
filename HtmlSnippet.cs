@@ -2,29 +2,27 @@
 
 namespace Peach
 {
-    // Author: Fabrice Medio <fmedio@gmail.com>
-    // Released under Creative Commons CC0 terms
-    // http://creativecommons.org/publicdomain/zero/1.0/legalcode
-
-    public class ForOhFourPage : IResource
+    public abstract class HtmlSnippet : Tags, IResource
     {
+        public abstract IRenderable Contents { get; }
+
         
 
         public string ContentType
         {
-            get { return "text/plain"; }
+            get { return "text/html"; }
         }
 
         public int HttpStatus
         {
-            get { return 404; }
+            get { return 200; }
         }
 
         public void Render(Stream stream)
         {
             var streamWriter = new StreamWriter(stream);
-            streamWriter.WriteLine("Four, oh, four!  Resource not found.");
-            streamWriter.Flush();
+            streamWriter.AutoFlush = true;
+            Contents.Render(streamWriter);
         }
 
         public Bag<string, string> ExtraHeaders

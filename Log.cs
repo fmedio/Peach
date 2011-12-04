@@ -15,8 +15,8 @@ namespace Peach
 
         public static void Error(object source, string message, Exception exception)
         {
-            Console.WriteLine("ERROR: {0} {1} {2} \n{3}", source.GetType().Name, exception.GetType().Name, message, exception.StackTrace);
+            Console.WriteLine("ERROR: {0} {1} {2} \n{3}", source.GetType().Name, exception.GetType().Name, message,
+                              exception.StackTrace);
         }
-
     }
 }

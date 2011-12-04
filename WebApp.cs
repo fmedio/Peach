@@ -14,14 +14,10 @@ namespace Peach
 
     public class WebApp<TServices>
     {
+        private readonly Dispatcher<TServices> _dispatcher;
         private readonly int _httpPort;
         private readonly TServices _services;
-        private readonly Dispatcher<TServices> _dispatcher;
         private readonly StaticFileHandler _staticFileHandler;
-
-        public IVerb<TServices> NotFoundVerb { get; set; }
-        public Func<IResource> NotFoundPage { get; set; }
-        public Func<string, Exception, IResource> ErrorPage { get; set; }
 
         public WebApp(int httpPort, DirectoryInfo webRoot, TServices services, IEnumerable<IVerb<TServices>> verbs)
         {
@@ -37,19 +33,23 @@ namespace Peach
             _dispatcher = new Dispatcher<TServices>(verbs, NotFoundVerb);
         }
 
+        public IVerb<TServices> NotFoundVerb { get; set; }
+        public Func<IResource> NotFoundPage { get; set; }
+        public Func<string, Exception, IResource> ErrorPage { get; set; }
+
         // Under Win7 you need to grant the current user the right to open an HTTP pipeline on all interfaces
         // like so:
         // netsh http add urlacl url=http://+:80/MyUri user=DOMAIN\user
 
         public void Start()
         {
-             var listener = new HttpListener();
+            var listener = new HttpListener();
             listener.Prefixes.Add("http://+:" + _httpPort + "/");
             listener.Start();
             Console.WriteLine("Listening on port {0}", _httpPort);
             while (true)
             {
-                var localContext = listener.GetContext();
+                HttpListenerContext localContext = listener.GetContext();
                 new Thread(() => Service(localContext.Request, localContext.Response)).Start();
             }
         }
@@ -62,15 +62,16 @@ namespace Peach
                 if (request.Url.LocalPath.StartsWith("/static/"))
                 {
                     resource = _staticFileHandler.Handle(request.Url.LocalPath);
-                } else
-                {
-                    var localName = Regex.Replace(request.Url.LocalPath, "^/", "");
-                    var args = ParseArgs(request.QueryString);
-                    var verb = _dispatcher.Dispatch(localName);
-                    resource = verb.Action(_services, args);                                                    
                 }
-
-            } catch (Exception e)
+                else
+                {
+                    string localName = Regex.Replace(request.Url.LocalPath, "^/", "");
+                    Bag<string, string> args = ParseArgs(request.QueryString);
+                    IVerb<TServices> verb = _dispatcher.Dispatch(localName);
+                    resource = verb.Action(_services, args);
+                }
+            }
+            catch (Exception e)
             {
                 resource = ErrorPage("Error executing request", e);
             }
@@ -82,7 +83,8 @@ namespace Peach
                 resource.ExtraHeaders.ForEach(kvp => response.AddHeader(kvp.Key, kvp.Value));
                 resource.Render(response.OutputStream);
                 response.OutputStream.Close();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Error(this, "Error rendering resource", e);
             }
@@ -92,10 +94,10 @@ namespace Peach
         {
             var bag = new Bag<string, string>();
 
-            foreach (var key in nvc.AllKeys)
+            foreach (string key in nvc.AllKeys)
             {
-                var values = nvc.GetValues(key);
-                foreach (var value in values)
+                string[] values = nvc.GetValues(key);
+                foreach (string value in values)
                 {
                     if (!String.IsNullOrEmpty(key))
                     {

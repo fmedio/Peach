@@ -13,16 +13,18 @@ namespace Peach
 
     public abstract class TypedVerb<TServices, TNoun> : IVerb<TServices>
     {
-        public abstract string Name { get; }
         public abstract NounParser<TNoun> NounParser { get; }
         public abstract Func<TServices, TNoun, IResource> Behavior { get; }
 
+        
+
+        public abstract string Name { get; }
+
         public Func<TServices, Bag<string, string>, IResource> Action
         {
-            get
-            {
-                return (services, bag) => Behavior(services, NounParser.Parse(bag));                
-            }
+            get { return (services, bag) => Behavior(services, NounParser.Parse(bag)); }
         }
+
+        
     }
 }

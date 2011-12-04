@@ -12,7 +12,7 @@ namespace Peach
     {
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            foreach (var value in enumerable)
+            foreach (T value in enumerable)
             {
                 action(value);
             }
@@ -21,18 +21,18 @@ namespace Peach
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
         {
             int currentOffset = 0;
-            foreach (var value in enumerable)
+            foreach (T value in enumerable)
             {
                 action(value, currentOffset++);
             }
-        } 
+        }
 
         public static void PipeTo(this Stream src, Stream dest)
         {
             int size = 4096;
-            byte[] buffer = new byte[size];
+            var buffer = new byte[size];
 
-            for (var read = src.Read(buffer, 0, size); read != 0; read = src.Read(buffer, 0, size))
+            for (int read = src.Read(buffer, 0, size); read != 0; read = src.Read(buffer, 0, size))
             {
                 dest.Write(buffer, 0, read);
             }
@@ -51,9 +51,9 @@ namespace Peach
             try
             {
                 Directory.Delete(directoryInfo.FullName, true);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                
             }
         }
     }

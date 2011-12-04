@@ -18,6 +18,8 @@ namespace Peach
             _dictionary = new Dictionary<K, List<V>>();
         }
 
+        
+
         public bool ContainsKey(K key)
         {
             return _dictionary.ContainsKey(key);
@@ -27,7 +29,7 @@ namespace Peach
         {
             if (_dictionary.ContainsKey(key))
             {
-                var list = _dictionary[key];
+                List<V> list = _dictionary[key];
                 list.Add(value);
             }
             else
@@ -64,14 +66,9 @@ namespace Peach
             get { return _dictionary.Values.SelectMany(v => v).ToList(); }
         }
 
-        public IEnumerable<V> GetValues(K key)
-        {
-            return _dictionary[key];
-        }
-
         public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
         {
-            IEnumerable<KeyValuePair<K, V>> allPairs = 
+            IEnumerable<KeyValuePair<K, V>> allPairs =
                 _dictionary.Keys.SelectMany(k => GetValues(k).Select(v => new KeyValuePair<K, V>(k, v)));
 
             return allPairs.ToList().GetEnumerator();
@@ -115,6 +112,13 @@ namespace Peach
         public bool IsReadOnly
         {
             get { return false; }
+        }
+
+        
+
+        public IEnumerable<V> GetValues(K key)
+        {
+            return _dictionary[key];
         }
     }
 }

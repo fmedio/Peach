@@ -10,7 +10,7 @@ namespace Peach
     {
         string ContentType { get; }
         int HttpStatus { get; }
-        void Render(Stream stream);
         Bag<string, string> ExtraHeaders { get; }
+        void Render(Stream stream);
     }
 }

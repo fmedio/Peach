@@ -11,12 +11,22 @@ namespace Peach.Test
     [TestFixture]
     public class TagTest
     {
+        public static string Render(IRenderable renderable)
+        {
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8);
+            streamWriter.AutoFlush = true;
+            renderable.Render(streamWriter);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return new StreamReader(memoryStream, Encoding.UTF8).ReadToEnd();
+        }
+
         [Test]
         public void TestRender()
         {
             Assert.AreEqual("<foo />", Render(new Tag("foo")));
             Assert.AreEqual("<foo>bar</foo>", Render(new Tag("foo").Add("bar")));
-            Assert.AreEqual("<foo one=\"one\" one=\"two\" hello=\"world\">bar<panda /></foo>", 
+            Assert.AreEqual("<foo one=\"one\" one=\"two\" hello=\"world\">bar<panda /></foo>",
                             Render(new Tag("foo")
                                        .Add("bar")
                                        .Attr("one", "one")
@@ -24,17 +34,6 @@ namespace Peach.Test
                                        .Attr("hello", "world")
                                        .Add(new Tag("panda"))
                                 ));
-
-        }
-
-        public static string Render(IRenderable renderable)
-        {
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8);            
-            streamWriter.AutoFlush = true;
-            renderable.Render(streamWriter);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return new StreamReader(memoryStream, Encoding.UTF8).ReadToEnd();
         }
     }
 }
