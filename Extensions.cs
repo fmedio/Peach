@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Peach
 {
@@ -10,6 +11,28 @@ namespace Peach
 
     public static class Extensions
     {
+        public static IEnumerable<List<T>> Batch<T>(this IEnumerable<T> enumerable, int batchSize)
+        {
+            int doneSoFar = 0;
+            var batch = new List<T>();
+
+            foreach (var e in enumerable)
+            {
+                batch.Add(e);
+                doneSoFar++;
+                if (doneSoFar%batchSize == 0)
+                {
+                    yield return batch;
+                    batch = new List<T>();
+                }
+            }
+
+            if (batch.Count != 0)
+            {
+                yield return batch;
+            }
+        }
+
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
             foreach (T value in enumerable)

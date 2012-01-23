@@ -68,6 +68,7 @@
     <Compile Include="Test\BagTest.cs" />
     <Compile Include="Test\TagTest.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="TextResource.cs" />
     <Compile Include="WebApp.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
