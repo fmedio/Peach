@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Peach
 {
@@ -11,6 +12,16 @@ namespace Peach
 
     public static class Extensions
     {
+        public static double Entropy(this IEnumerable<double> series)
+        {
+            return -series.Aggregate(0d, (acc, current) => acc + (current*Math.Log(current)));
+        }
+
+        public static double Entropy<T>(this IEnumerable<T> series, Func<T, double> selector)
+        {
+            return series.Select(selector).Entropy();
+        }
+
         public static IEnumerable<List<T>> Batch<T>(this IEnumerable<T> enumerable, int batchSize)
         {
             int doneSoFar = 0;
@@ -78,6 +89,22 @@ namespace Peach
             catch (Exception e)
             {
             }
+        }
+    }
+
+    [TestFixture]
+    public class ExtensionsTest
+    {
+        [Test]
+        public void TestEntropy()
+        {
+            var ps = new [] {.1, .2, .99};
+            Assert.AreEqual(OtherAlgorithm(ps), ps.Entropy());
+        }
+
+        private double OtherAlgorithm(double[] ps)
+        {
+            return - ps.Sum(p => p*Math.Log(p));
         }
     }
 }
