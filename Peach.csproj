@@ -61,6 +61,7 @@
     <Compile Include="NullNounParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NounParser.cs" />
+    <Compile Include="Sisyphus.cs" />
     <Compile Include="StaticFileHandler.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="Tags.cs" />

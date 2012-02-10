@@ -13,6 +13,13 @@ namespace Peach
             Console.WriteLine("DEBUG [{0}]: {1}", source.GetType().Name, message);
         }
 
+
+        public static void Debug(object source, string message, Exception exception)
+        {
+            Console.WriteLine("DEBUG [{0}]: {1} {2} \n{3}", source.GetType().Name, exception.GetType().Name, message,
+                              exception.StackTrace);
+        }
+
         public static void Error(object source, string message, Exception exception)
         {
             Console.WriteLine("ERROR [{0}]: {1} {2} \n{3}", source.GetType().Name, exception.GetType().Name, message,
